@@ -317,7 +317,7 @@ html[dir="ltr"] .mobile-input{direction:ltr}
   background:linear-gradient(to right,#c8102e 0%,#c8102e 50%,#0a2f6b 50%,#0a2f6b 100%);
 }
 .admin-login{
-  max-width:440px;
+  max-width:500px;
   width:100%;
   margin:0 auto;
   background:#fff;
@@ -325,7 +325,7 @@ html[dir="ltr"] .mobile-input{direction:ltr}
   box-shadow:0 4px 20px rgba(0,0,0,0.08);
   overflow:hidden;
   border:1px solid #edf0f3;
-  min-height:420px;
+  min-height:440px;
 }
 .admin-brand{
   display:flex;
@@ -395,8 +395,8 @@ html[dir="ltr"] .mobile-input{direction:ltr}
 @media(min-width:1024px){
   .admin-main{padding-top:38px;padding-bottom:52px}
   .admin-login{
-    max-width:610px;
-    min-height:540px;
+    max-width:680px;
+    min-height:560px;
     border-radius:18px;
     box-shadow:0 14px 34px rgba(0,0,0,0.12);
   }
