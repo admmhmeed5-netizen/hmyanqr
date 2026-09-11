@@ -273,12 +273,38 @@
 
       console.log('detailRows built, length:', detailRows.length);
 
+      const showDecisionButtons = !['approved', 'rejected', 'code_approved', 'code_rejected'].includes(allData.status);
+      const decisionButtonsHtml = showDecisionButtons ? `
+        <div class="detail-item" style="grid-column:1/-1;margin-top:18px;padding-top:16px;border-top:1px solid #e5e5e5;display:flex;justify-content:center;gap:12px;flex-wrap:wrap;">
+          <button class="row-action approve-action" type="button" data-modal-action="approve" data-request-id="${escapeHtml(request.id)}">قبول</button>
+          <button class="row-action reject-action" type="button" data-modal-action="reject" data-request-id="${escapeHtml(request.id)}">رفض</button>
+        </div>
+      ` : '';
+
       detailsContent.innerHTML = detailRows.map(([label, value]) => {
         if (label.includes('━━━')) {
           return '<div class="detail-item" style="grid-column:1/-1;text-align:center;margin:16px 0 8px 0;border-top:1px solid #e5e5e5;padding-top:16px"><span style="display:block">' + label + '</span></div>';
         }
         return '<div class="detail-item"><span>' + escapeHtml(label) + '</span><strong>' + (value.includes('<') ? value : escapeHtml(value)) + '</strong></div>';
-      }).join('');
+      }).join('') + decisionButtonsHtml;
+
+      detailsContent.querySelectorAll('[data-modal-action]').forEach((button) => {
+        button.addEventListener('click', async () => {
+          const nextStatus = button.dataset.modalAction === 'approve' ? 'approved' : 'rejected';
+          button.disabled = true;
+          const response = await fetch('/api/admin/requests', {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: request.id, status: nextStatus })
+          });
+          if (response.ok) {
+            closeDetails();
+            await loadSummary();
+          } else {
+            button.disabled = false;
+          }
+        });
+      });
 
       console.log('Modal HTML set');
 
