@@ -317,7 +317,7 @@ html[dir="ltr"] .mobile-input{direction:ltr}
   background:linear-gradient(to right,#c8102e 0%,#c8102e 50%,#0a2f6b 50%,#0a2f6b 100%);
 }
 .admin-login{
-  max-width:380px;
+  max-width:440px;
   width:100%;
   margin:0 auto;
   background:#fff;
@@ -351,22 +351,22 @@ html[dir="ltr"] .mobile-input{direction:ltr}
   margin:0;
   text-align:center;
   color:#1a1a1a;
-  font-size:20px;
+  font-size:22px;
   font-weight:700;
 }
 .admin-login>p{
   margin:8px 0 20px;
   color:#777;
   text-align:center;
-  font-size:13px;
+  font-size:14px;
   line-height:1.8;
 }
-.admin-login-form{display:flex;flex-direction:column;gap:10px;padding:30px 26px;background:#fff}
+.admin-login-form{display:flex;flex-direction:column;gap:10px;padding:32px 28px;background:#fff}
 .admin-login-form .field{display:flex;flex-direction:column;gap:6px;text-align:center}
 .admin-login-form .field span{font-size:13px;color:#666;font-weight:600}
 .admin-login-form .field input{
   width:100%;
-  padding:11px;
+  padding:12px 14px;
   font-size:15px;
   border:1px solid #b5b5b5;
   border-radius:6px;
