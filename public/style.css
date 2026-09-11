@@ -407,6 +407,12 @@ html[dir="ltr"] .mobile-input{direction:ltr}
   .admin-login-form .field span{font-size:16px}
   .admin-login-form .field input{height:56px;padding:14px 18px;font-size:18px}
   .admin-login-form .submit-button{height:56px;margin-top:14px;font-size:17px}
+  .requests-panel{padding:30px}
+  .requests-heading h2{font-size:20px}
+  .requests-heading p{font-size:13px}
+  .requests-table{min-width:1300px;font-size:16px}
+  .requests-table th{padding:14px 12px;font-size:16px}
+  .requests-table td{padding:14px 12px;font-size:16px}
 }
 .admin-error{
   margin:0!important;
