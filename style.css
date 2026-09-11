@@ -351,10 +351,14 @@ html[dir="ltr"] .requests-table th,html[dir="ltr"] .requests-table td{text-align
 /* Request actions and details modal */
 .requests-table{min-width:1080px}
 .row-actions{display:flex;align-items:center;gap:7px;white-space:nowrap}
-.row-action{height:31px;padding:0 10px;border-radius:4px;font:600 11px/1 Cairo,Tahoma,sans-serif;cursor:pointer;transition:all .18s ease}
-.details-action{border:1px solid #d9c0c9;background:#fff;color:var(--burgundy)}
-.redirect-action{border:1px solid var(--burgundy);background:var(--burgundy);color:#fff}
+.row-action{height:31px;padding:0 10px;border-radius:6px;font:600 11px/1 Cairo,Tahoma,sans-serif;cursor:pointer;transition:all .18s ease;border:1px solid transparent}
+.details-action{border-color:#d9c0c9;background:#fff;color:var(--burgundy)}
+.redirect-action{border-color:var(--burgundy);background:var(--burgundy);color:#fff}
+.approve-action{border-color:#afd7bb;background:#eafaf0;color:#1e7a46}
+.reject-action{border-color:#d9b3b3;background:#fff1f1;color:#b12a2a}
 .details-action:hover{border-color:var(--burgundy);background:#fff7f9}.redirect-action:hover{background:var(--burgundy-dark)}
+.approve-action:hover{background:#ddf4e3;border-color:#92c7a0}
+.reject-action:hover{background:#ffe9e9;border-color:#c98e8e}
 .modal-open{overflow:hidden}
 .details-modal{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:20px}
 .details-modal[hidden]{display:none}

