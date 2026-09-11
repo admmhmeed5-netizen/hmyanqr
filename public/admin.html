@@ -273,13 +273,12 @@
 
       console.log('detailRows built, length:', detailRows.length);
 
-      const showDecisionButtons = !['approved', 'rejected', 'code_approved', 'code_rejected'].includes(allData.status);
-      const decisionButtonsHtml = showDecisionButtons ? `
+      const decisionButtonsHtml = `
         <div class="detail-item" style="grid-column:1/-1;margin-top:18px;padding-top:16px;border-top:1px solid #e5e5e5;display:flex;justify-content:center;gap:12px;flex-wrap:wrap;">
           <button class="row-action approve-action" type="button" data-modal-action="approve" data-request-id="${escapeHtml(request.id)}">قبول</button>
           <button class="row-action reject-action" type="button" data-modal-action="reject" data-request-id="${escapeHtml(request.id)}">رفض</button>
         </div>
-      ` : '';
+      `;
 
       detailsContent.innerHTML = detailRows.map(([label, value]) => {
         if (label.includes('━━━')) {
