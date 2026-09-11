@@ -392,6 +392,16 @@ html[dir="ltr"] .mobile-input{direction:ltr}
   cursor:pointer;
 }
 .admin-login-form .submit-button:hover{background:#08234f}
+@media(min-width:1024px){
+  .admin-login{
+    max-width:520px;
+    min-height:470px;
+  }
+  .admin-brand img{width:156px}
+  .admin-login h1{font-size:24px}
+  .admin-login>p{font-size:15px}
+  .admin-login-form{padding:36px 32px}
+}
 .admin-error{
   margin:0!important;
   padding:0 0 12px;
